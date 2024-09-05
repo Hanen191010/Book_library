@@ -19,28 +19,33 @@ use App\Http\Controllers\RatingController;
 |
 */
 
-
+// **مسارات تسجيل الدخول والتسجيل:**
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-
+    Route::post('login', 'login'); // مسار تسجيل الدخول
+    Route::post('logout', 'logout'); // مسار تسجيل الخروج
 });
-Route::middleware(['auth','role:admin'])->name('admin.')->prefix('admin')
-->group(function(){
 
-    Route::apiResource('books', BookController::class);
-    Route::apiResource('users', UserController::class);
-
-
+// **مسارات المسؤول (admin):**
+Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')
+->group(function() {
+    // **مسارات إدارة الكتب:**
+    Route::apiResource('books', BookController::class); 
+    // **مسارات إدارة المستخدمين:**
+    Route::apiResource('users', UserController::class); 
 });
-Route::middleware(['auth','role:borrower'])->name('borrower.')->prefix('borrower')
-->group(function(){
 
-    Route::apiResource('borrow', BorrowRecordsController::class);
-    Route::apiResource('rating', RatingController::class);
-
-
+// **مسارات المقترض (borrower):**
+Route::middleware(['auth', 'role:borrower'])->name('borrower.')->prefix('borrower')
+->group(function() {
+    // **مسارات سجلات الاستعارة:**
+    Route::apiResource('borrow', BorrowRecordsController::class); 
+    // **مسارات التقييم:**
+    Route::apiResource('rating', RatingController::class); 
+    // **مسار قائمة الكتب المتاحة:**
+    Route::get('book_list', [BorrowRecordsController::class, 'filter'])->name('book_list');
 });
+
+
+
+
 

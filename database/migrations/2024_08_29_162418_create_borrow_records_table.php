@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('book_id');
             $table->dateTime('borrowed_at');
             $table->date('due_date');
-            $table->dateTime('returned_at');
+            $table->dateTime('returned_at')->nullable();
             $table->timestamps();
             // Foreign Keys
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
